@@ -78,7 +78,8 @@ All public data types are frozen `dataclasses` with a `to_dict()` method. Errors
 class Settings:
     aws_region: str            # AWS_REGION            (required)
     claims_bucket: str         # CLAIMS_BUCKET         (required)
-    claims_kms_key_id: str     # CLAIMS_KMS_KEY_ID     (required; alias ARN from terraform output)
+    claims_kms_key_id: str     # CLAIMS_KMS_KEY_ID     (required; key ARN = terraform output claims_kms_key_arn —
+                               #   not the alias: the bucket policy compares the key ARN sent in the request)
     extract_model_id: str      # EXTRACT_MODEL_ID      default "us.anthropic.claude-haiku-5-5"
     assess_model_id: str       # ASSESS_MODEL_ID       default "us.anthropic.claude-sonnet-5-5"
     embed_model_id: str        # EMBED_MODEL_ID        default "amazon.titan-embed-text-v2:0"

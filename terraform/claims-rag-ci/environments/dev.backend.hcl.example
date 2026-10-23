@@ -1,0 +1,7 @@
+# Copy to dev.backend.hcl and fill in <account_id>.
+bucket       = "tsekatm-terraform-state-<account_id>"
+key          = "insurance-claim-rag-system/claims-rag-ci/terraform.tfstate"
+region       = "us-east-1"
+use_lockfile = true
+encrypt      = true
+kms_key_id   = "arn:aws:kms:us-east-1:<account_id>:alias/terraform-state" # required: the state bucket denies non-KMS uploads
