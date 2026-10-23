@@ -1,0 +1,7 @@
+-r requirements.txt
+pytest==9.1.1
+pytest-cov==7.1.0
+ruff==0.17.2
+mypy==2.4.0
+types-PyYAML==6.0.12.20260906
+boto3-stubs[bedrock-runtime,s3]==1.43.118

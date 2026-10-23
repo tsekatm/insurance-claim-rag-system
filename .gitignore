@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+tfplan
+*.tfplan
+*.backend.hcl
+!*.backend.hcl.example
+crash.log
+
+# TBT local artifacts (never committed)
+.claude/state/
+.claude/logs/
+.claude/snapshots/
+.claude/staging/
+
+# Secrets — never
+.env
+*.pem
+
+# Eval outputs are regenerated; only the committed summary in docs/FINDINGS.md is kept
+eval/results/*
+!eval/results/.gitkeep
+
+.DS_Store
