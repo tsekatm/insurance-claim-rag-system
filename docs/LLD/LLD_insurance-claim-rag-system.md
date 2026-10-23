@@ -592,7 +592,7 @@ Remote state: `tsekatm-terraform-state-443845328805`, key `insurance-claim-rag-s
 | :- | :- | :- |
 | 1 | `claims-rag-storage` | KMS key `alias/insurance-claim-rag-claims` (rotation, `prevent_destroy`); bucket `insurance-claim-rag-claims-dev` (SSE-KMS + bucket key, versioning, public-access block, `BucketOwnerEnforced`, access logging to `insurance-claim-rag-access-logs-dev`, lifecycle TBC6); policy: deny non-TLS, deny PUT without `aws:kms`, deny PUT with any other KMS key |
 | 2 | `claims-rag-iam` | Role `insurance-claim-rag-runtime-role`, trusted only by the account's `AWSReservedSSO_AdministratorAccess_*` role (`aws:PrincipalArn` condition), max session 1 h; policy below |
-| 3 | `claims-rag-ci` | Role `insurance-claim-rag-ci-role` for GitHub OIDC, trust `repo:tsekatm/insurance-claim-rag-system:environment:dev`; **applied by hand with elevated credentials only — never by CI** (CI Role Self-IAM rule); OIDC provider per TBC3 |
+| 3 | `claims-rag-ci` | Role `insurance-claim-rag-ci-role` for GitHub OIDC, trust = GitHub immutable subject `repo:tsekatm@<owner_id>/insurance-claim-rag-system@<repo_id>:environment:dev`; **applied by hand with elevated credentials only — never by CI** (CI Role Self-IAM rule); OIDC provider per TBC3 |
 
 Runtime role policy (no `*` actions or resources):
 

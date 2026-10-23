@@ -37,6 +37,7 @@
 | # | Defect | Fix |
 | :- | :- | :- |
 | 1 | A post-apply assertion ended in `or True` (could never fail — TBT Law 13) | Replaced with a real `== "allowed"` assertion before any run |
+| 3 | First `deploy-dev` run (40018620692): OIDC `AssumeRoleWithWebIdentity` denied. CloudTrail showed GitHub's immutable subject `repo:tsekatm@86061117/insurance-claim-rag-system@1431391826:environment:dev`; the trust policy expected `repo:tsekatm/insurance-claim-rag-system:environment:dev` | Trust test updated first (red), CI role trust changed to the immutable subject (plan 1 change, approved, applied by hand); post-apply 31/31 |
 | 2 | LLD said `CLAIMS_KMS_KEY_ID` = alias ARN; the bucket policy compares the key ARN in the request, so an alias would be denied | LLD corrected to the key ARN (`claims_kms_key_arn` output) |
 
 ## Not yet verified (later steps)
