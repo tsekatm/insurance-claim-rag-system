@@ -14,6 +14,11 @@ data "aws_kms_alias" "state" {
 }
 
 locals {
+  # GitHub immutable subject format: repo:<owner>@<owner_id>/<repo>@<repo_id>:environment:<env>.
+  # The IDs mean a deleted-and-recreated repo with the same name cannot assume this role.
+  repo_owner      = split("/", var.github_repository)[0]
+  repo_name       = split("/", var.github_repository)[1]
+  oidc_subject    = "repo:${local.repo_owner}@${var.github_owner_id}/${local.repo_name}@${var.github_repository_id}:environment:${var.github_environment}"
   account_id      = data.aws_caller_identity.current.account_id
   storage         = data.terraform_remote_state.storage.outputs
   runtime_role    = "arn:aws:iam::${local.account_id}:role/${data.terraform_remote_state.iam.outputs.runtime_role_name}"
@@ -48,7 +53,7 @@ data "aws_iam_policy_document" "ci_trust" {
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repository}:environment:${var.github_environment}"]
+      values   = [local.oidc_subject]
     }
   }
 }

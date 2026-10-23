@@ -23,6 +23,16 @@ variable "github_repository" {
   type        = string
 }
 
+variable "github_owner_id" {
+  description = "Numeric GitHub owner ID (gh api users/<owner> --jq .id) — part of the immutable OIDC subject."
+  type        = number
+}
+
+variable "github_repository_id" {
+  description = "Numeric GitHub repository ID (gh api repos/<owner>/<repo> --jq .id) — part of the immutable OIDC subject."
+  type        = number
+}
+
 variable "github_environment" {
   description = "GitHub environment the deploy job runs in (required reviewer configured there)."
   type        = string

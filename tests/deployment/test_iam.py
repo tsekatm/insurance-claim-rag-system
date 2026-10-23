@@ -117,8 +117,10 @@ def test_ci_role_trusts_only_this_repo_dev_environment(iam, account_id):
     }
     cond = stmt["Condition"]["StringEquals"]
     assert cond["token.actions.githubusercontent.com:aud"] == "sts.amazonaws.com"
+    # GitHub immutable subject: owner and repository IDs are embedded, so a recreated repo with the same name
+    # cannot assume this role.
     assert cond["token.actions.githubusercontent.com:sub"] == (
-        f"repo:tsekatm/insurance-claim-rag-system:environment:{ENVIRONMENT}"
+        f"repo:tsekatm@86061117/insurance-claim-rag-system@1431391826:environment:{ENVIRONMENT}"
     )
 
 
