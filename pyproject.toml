@@ -1,0 +1,24 @@
+[project]
+name = "claims-rag"
+version = "0.1.0"
+description = "Policy-grounded insurance claims processing on Amazon Bedrock"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --cov=claims_rag --cov-report=term-missing"
+pythonpath = ["src"]
+markers = ["integration: calls real AWS services in the dev account"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "S"]
+per-file-ignores = { "tests/*" = ["S101"] }
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
