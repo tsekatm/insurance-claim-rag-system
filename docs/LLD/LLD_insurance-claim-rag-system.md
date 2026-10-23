@@ -4,7 +4,8 @@
 
 | Version | Date | Author | Change |
 | :- | :- | :- | :- |
-| 1.0 | 2026-10-23 | Tebogo Tseka (with Claude) | First issue, from `PLAN_insurance-claim-rag-system.md` v1.2 — **DRAFT, awaiting approval** |
+| 1.0 | 2026-10-23 | Tebogo Tseka (with Claude) | First issue, from `PLAN_insurance-claim-rag-system.md` v1.2 |
+| 1.1 | 2026-10-23 | Tebogo Tseka (with Claude) | **Approved.** TBC1, 5, 6, 7 accepted; TBC4 in scope: scanned-PDF fallback (`ScanAwareDocumentReader`, image blocks) |
 
 ## 2. **Introduction**
 
@@ -107,6 +108,7 @@ class DocumentInput:
     format: str | None = None      # "pdf" | "docx" | "txt" when content is bytes
     content: bytes | None = None
     text: str | None = None        # set instead of content by a text-producing reader (e.g. Textract)
+    images: tuple[bytes, ...] = () # PNG page images, set instead of content for scanned PDFs (§4.9)
 
 @dataclass(frozen=True)
 class ModelResponse:
@@ -131,8 +133,10 @@ class ModelInvoker:
     def embed(self, model_id: str, text: str) -> list[float]: ...
 ```
 
-- **converse** builds one user message: the document block first (bytes → `{"document": {"format", "name",
-  "source": {"bytes"}}}`; text → a text block wrapped in `<document>` tags), then `user_text`. `system` goes in the
+- **converse** builds one user message: the document first (bytes → `{"document": {"format", "name",
+  "source": {"bytes"}}}`; text → a text block wrapped in `<document>` tags; images → one
+  `{"image": {"format": "png", "source": {"bytes"}}}` block per page), then `user_text`. Exactly one of
+  `content`, `text`, `images` must be set → otherwise `ValueError`. `system` goes in the
   `system` parameter; `inferenceConfig={"temperature", "maxTokens"}`. Latency is measured with
   `time.perf_counter()` around the call. Returns usage from `response["usage"]`.
 - **Retries.** Throttling and transient errors are retried by botocore's adaptive mode (exponential backoff with
@@ -296,8 +300,26 @@ class ConverseDocumentReader:
 ```
 
 Validates format and size (`UnsupportedDocumentError`, `DocumentTooLargeError`) and returns a bytes
-`DocumentInput`. Production swap: `TextractDocumentReader` returning `DocumentInput(text=...)` — named, not
-built (see TBC4 for scanned PDFs).
+`DocumentInput`.
+
+```python
+class ScanAwareDocumentReader:
+    """Decorator over another reader: image-only PDFs are sent as page images instead of a document block."""
+    def __init__(self, inner: DocumentReader, min_text_chars: int = 50, max_pages: int = 5,
+                 render_scale: float = 2.0) -> None: ...
+    def read(self, content: bytes, fmt: str, name: str) -> DocumentInput: ...
+```
+
+- Why: a Converse PDF document block may carry only the PDF's text layer, so a scanned page with no text layer
+  reaches the model empty (R1).
+- For `pdf` only: open with `pypdfium2`; if the text layer of the first `max_pages` pages has fewer than
+  `min_text_chars` non-whitespace characters, render each page (`render_scale` ≈ 144 DPI) to PNG and return
+  `DocumentInput(images=…)`. More pages than `max_pages` → `DocumentTooLargeError` (Converse caps images per
+  request; claims here are 1–2 pages). Any other format, or a PDF with a text layer → delegated to `inner`.
+- The result records `document_mode`: `document_block` | `page_images` | `text`, so FINDINGS.md can compare
+  how each model handles each mode.
+- Runtime deps added: `pypdfium2`, `Pillow`.
+- Production swap: `TextractDocumentReader` returning `DocumentInput(text=...)` — named, not built.
 
 ### 4.10. `components/router.py` — `Router`
 
@@ -463,7 +485,7 @@ Invalid assessment JSON → ⑥ skipped, route `human_review`. AWS error after r
 
 ### 6.3. `ProcessResult`
 
-`claim_id`, `s3_key`, `document_format`, `fields`, `validation` (`schema_errors`, `rule_violations`),
+`claim_id`, `s3_key`, `document_format`, `document_mode`, `fields`, `validation` (`schema_errors`, `rule_violations`),
 `retrieved_clause_ids`, `assessment` (redacted), `grounding`, `route` (`route`, `reasons`), `steps`
 (`{step_name: StepUsage}`), `totals` (`latency_ms`, `input_tokens`, `output_tokens`), `prompt_versions`.
 
@@ -607,7 +629,7 @@ only.
 
 | # | Risk | Mitigation |
 | :- | :- | :- |
-| R1 | Converse document blocks may pass only extracted text for PDFs → the image-only scan yields nothing | Measured as a finding; optional fallback in TBC4 |
+| R1 | Converse document blocks may pass only extracted text for PDFs → the image-only scan yields nothing | `ScanAwareDocumentReader` sends page images (§4.9); `document_mode` recorded per run |
 | R2 | Model access not enabled for a model → `AccessDeniedException` | Checked in the step 6 integration test before the eval |
 | R3 | Judge model biased towards its own family's output | Hand spot-check of 20% of judged rows; disagreement reported |
 | R4 | Small sample (4 claims) → results not statistically meaningful | Stated plainly in FINDINGS.md; 3 runs each to show variance |
@@ -616,15 +638,16 @@ only.
 
 ## 13. **TBC (To be confirmed)**
 
-| # | Item | Proposed |
+| # | Item | Status |
 | :- | :- | :- |
-| TBC1 | Routing thresholds | confidence `0.75`, high value `50 000` (claim currency) |
-| TBC2 | Destination regions of each `us.*` inference profile | read with `aws bedrock get-inference-profile` at step 3 and set in `dev.tfvars` |
-| TBC3 | GitHub OIDC provider — account-wide, so it belongs in `aws-account-bootstrap` | check if it exists at step 3; if not, add it to the bootstrap repo |
-| TBC4 | Scanned-PDF fallback: render PDF pages to PNG (`pypdfium2`) and send as Converse image blocks | out of scope unless you want it; R1 records the result either way |
-| TBC5 | On-demand prices per model | filled into `eval/pricing.yaml` from the AWS Bedrock pricing page at step 7, with the date |
-| TBC6 | Claims bucket object expiry | 30 days (synthetic data only) |
-| TBC7 | Currency for sample claims | `ZAR` |
+| TBC1 | Routing thresholds | ✅ confidence `0.75`, high value `50 000` (claim currency) |
+| TBC2 | Destination regions of each `us.*` inference profile | ⏳ read with `aws bedrock get-inference-profile` at step 3 and set in `dev.tfvars` |
+| TBC3 | GitHub OIDC provider — account-wide, so it belongs in `aws-account-bootstrap` | ⏳ checked at step 3; if absent, added to the bootstrap repo |
+| TBC4 | Scanned-PDF fallback | ✅ in scope — `ScanAwareDocumentReader` (§4.9) |
+| TBC5 | On-demand prices per model | ⏳ filled into `eval/pricing.yaml` from the AWS Bedrock pricing page at step 7, with the date |
+| TBC6 | Claims bucket object expiry | ✅ 30 days |
+| TBC7 | Currency for sample claims | ✅ `ZAR` |
+| — | Judge model | ✅ Claude Opus 5.5, 20% hand spot-check |
 
 ## 14. **Definition of Terms**
 
