@@ -25,4 +25,37 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: ruff format --check src tests && ruff check src tests
       - run: mypy src
-      - run: pytest -m "not integration" --junitxml=tests/reports/junit-unit.xml
+      - run: pytest -m "not integration and not deployment" --junitxml=tests/reports/junit-unit.xml
+
+  terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        folder: [claims-rag-storage, claims-rag-iam, claims-rag-ci]
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: "1.15.8"
+      - uses: terraform-linters/setup-tflint@90f302c255ef959cbfb4bd10581afecdb7ece3e6 # v4.1.1
+        with:
+          tflint_version: v0.65.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: fmt / validate (no backend — static checks only)
+        working-directory: terraform/${{ matrix.folder }}
+        run: |
+          terraform fmt -check -recursive
+          terraform init -backend=false -input=false
+          terraform validate
+      - name: tflint
+        working-directory: terraform/${{ matrix.folder }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: tflint --init && tflint
+      - name: checkov (skips are inline, each with a reason)
+        run: |
+          pip install "$(grep '^checkov==' requirements-dev.txt)"
+          checkov -d terraform/${{ matrix.folder }} --framework terraform --quiet --compact
