@@ -60,7 +60,7 @@ insurance-claim-rag-system/
 │   │   ├── safety.py                 # redact_pii, check_grounding (Guardrails stand-in) → diagram ⑥
 │   │   ├── chunker.py                # split policy text → chunks with clause_id, source, section
 │   │   ├── retriever.py              # Retriever protocol; InMemoryRetriever (Titan V2 + cosine) → diagram ④
-│   │   ├── document_reader.py        # DocumentReader protocol; ConverseDocumentReader          → diagram ①
+│   │   ├── document_reader.py        # DocumentReader protocol; ConverseDocumentReader; ScanAwareDocumentReader (scanned PDF → page images) → diagram ①
 │   │   └── router.py                 # Router.decide(assessment, fields) from rules/routing.yaml → diagram ⑦
 │   └── app/                          # Step 2 — claims business logic, uses components only via injection
 │       ├── uploader.py               # upload_claim, get_document_bytes (SSE-KMS, metadata)
