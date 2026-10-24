@@ -50,4 +50,9 @@ Application upload/invoke against these resources (step 6 integration test).
 - GitHub `dev` environment: required reviewer (owner), deployments from `main` only; `secrets.AWS_ROLE_ARN`, `vars.AWS_REGION`, `vars.TF_STATE_BUCKET`, `vars.TF_STATE_REGION`.
 - Jobs: `quality` (reusable `ci.yml`) → `plan` (🛑 approval; plan in job summary; digest of planned changes) → `apply` (🛑 approval; re-plan must match the reviewed digest, then apply, then post-apply tests that fail on any skip).
 - Config parity check: GitHub vars vs committed `dev.tfvars`.
-- First green run: _recorded below after the merge-triggered run._
+- First green run: [40020720952](https://github.com/tsekatm/insurance-claim-rag-system/actions/runs/40020720952)
+  (head `909264b`, 2026-10-24, triggered by the PR #5 merge). OIDC login as `insurance-claim-rag-ci-role` ✅ ·
+  plan: no changes in `claims-rag-storage` and `claims-rag-iam` ✅ · re-plan digest matched the reviewed plan ✅ ·
+  apply 0/0/0 ✅ · post-apply 31 passed, 0 skipped (`REQUIRE_DEPLOYMENT_CHECKS=1`) ✅.
+
+**Step 3 verdict: PASS.**
