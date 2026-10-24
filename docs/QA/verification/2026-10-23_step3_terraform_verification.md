@@ -47,8 +47,8 @@ Application upload/invoke against these resources (step 6 integration test).
 ## Step 3a — deploy-dev.yml
 
 - Trigger: push to `main` touching `terraform/claims-rag-{storage,iam}/**`, `tests/deployment/**` or the workflow; also manual.
-- GitHub `dev` environment: required reviewer (owner), deployments from `main` only; `secrets.AWS_ROLE_ARN`, `vars.AWS_REGION`, `vars.TF_STATE_BUCKET`, `vars.TF_STATE_REGION`.
-- Jobs: `quality` (reusable `ci.yml`) → `plan` (🛑 approval; plan in job summary; digest of planned changes) → `apply` (🛑 approval; re-plan must match the reviewed digest, then apply, then post-apply tests that fail on any skip).
+- GitHub `dev` environment: deployments from `main` only (required reviewer removed 2026-10-24, owner decision; run 40020720952 ran with it); `secrets.AWS_ROLE_ARN`, `vars.AWS_REGION`, `vars.TF_STATE_BUCKET`, `vars.TF_STATE_REGION`.
+- Jobs: `quality` (reusable `ci.yml`) → `plan` (plan in job summary; digest of planned changes) → `apply` (re-plan must match the reviewed digest, then apply, then post-apply tests that fail on any skip).
 - Config parity check: GitHub vars vs committed `dev.tfvars`.
 - First green run: [40020720952](https://github.com/tsekatm/insurance-claim-rag-system/actions/runs/40020720952)
   (head `909264b`, 2026-10-24, triggered by the PR #5 merge). OIDC login as `insurance-claim-rag-ci-role` ✅ ·

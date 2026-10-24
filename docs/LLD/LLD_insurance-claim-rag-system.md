@@ -606,9 +606,9 @@ Runtime role policy (no `*` actions or resources):
 `bedrock:InvokeModel` also authorises the Converse API — there is no `bedrock:Converse` IAM action.
 
 **CI after the Terraform step** (`deploy-dev.yml`): OIDC to `insurance-claim-rag-ci-role`; `vars.AWS_REGION`,
-`secrets.AWS_ROLE_ARN` scoped to the `dev` GitHub environment (required reviewer); jobs
-fmt → validate → tflint → checkov → `plan -out` (uploaded as artefact) → 🛑 environment approval →
-`apply` of that exact plan → post-apply tests with `REQUIRE_DEPLOYMENT_CHECKS=1`; concurrency lock; SHA-pinned
+`secrets.AWS_ROLE_ARN` scoped to the `dev` GitHub environment (main only, no required reviewer); jobs
+fmt → validate → tflint → checkov → `plan` (digest of planned changes) →
+`apply` only if the re-plan matches that digest → post-apply tests with `REQUIRE_DEPLOYMENT_CHECKS=1`; concurrency lock; SHA-pinned
 actions; `permissions: id-token: write, contents: read`. CI applies `claims-rag-storage` and `claims-rag-iam`
 only.
 

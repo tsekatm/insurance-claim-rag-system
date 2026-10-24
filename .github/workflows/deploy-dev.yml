@@ -1,6 +1,7 @@
 name: deploy-dev
 
-# Push to main → quality gate → plan (🛑 approval) → apply the reviewed plan + post-apply tests (🛑 approval).
+# Push to main → quality gate → plan → apply the planned changes + post-apply tests. No manual approval in dev
+# (owner decision 2026-10-24); the digest check still stops an apply that differs from the plan in the summary.
 # Applies claims-rag-storage and claims-rag-iam only. claims-rag-ci is applied by hand with elevated
 # credentials (the CI role must never modify itself).
 on:
@@ -91,7 +92,7 @@ jobs:
   apply:
     needs: plan
     runs-on: ubuntu-latest
-    environment: dev # second approval: the reviewer has read the plan in the plan job's summary
+    environment: dev # OIDC trust is scoped to this environment
     permissions:
       contents: read
       id-token: write
