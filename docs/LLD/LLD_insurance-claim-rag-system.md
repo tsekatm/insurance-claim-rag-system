@@ -6,6 +6,7 @@
 | :- | :- | :- | :- |
 | 1.0 | 2026-10-23 | Tebogo Tseka (with Claude) | First issue, from `PLAN_insurance-claim-rag-system.md` v1.2 |
 | 1.1 | 2026-10-23 | Tebogo Tseka (with Claude) | **Approved.** TBC1, 5, 6, 7 accepted; TBC4 in scope: scanned-PDF fallback (`ScanAwareDocumentReader`, image blocks) |
+| 1.2 | 2026-10-24 | Tebogo Tseka (with Claude) | Step 4 implementation notes: `DocumentInput.mode`; page-image size limit; dependency pins; router also reviews a missing decision; dev environment has no required reviewer |
 
 ## 2. **Introduction**
 
@@ -317,9 +318,11 @@ class ScanAwareDocumentReader:
   `min_text_chars` non-whitespace characters, render each page (`render_scale` ≈ 144 DPI) to PNG and return
   `DocumentInput(images=…)`. More pages than `max_pages` → `DocumentTooLargeError` (Converse caps images per
   request; claims here are 1–2 pages). Any other format, or a PDF with a text layer → delegated to `inner`.
-- The result records `document_mode`: `document_block` | `page_images` | `text`, so FINDINGS.md can compare
-  how each model handles each mode.
-- Runtime deps added: `pypdfium2`, `Pillow`.
+- The result records its mode as `DocumentInput.mode` (derived from which payload is set):
+  `document_block` | `page_images` | `text`, so FINDINGS.md can compare how each model handles each mode.
+- A rendered page over 3.75 MB (Converse image limit) → `DocumentTooLargeError`; an unreadable PDF →
+  `UnsupportedDocumentError`.
+- Runtime deps added: `pypdfium2==5.14.0`, `Pillow==12.3.0`.
 - Production swap: `TextractDocumentReader` returning `DocumentInput(text=...)` — named, not built.
 
 ### 4.10. `components/router.py` — `Router`
@@ -346,7 +349,7 @@ class RoutingSignals:            # generic inputs — the router does not read c
 ```
 
 `human_review` if any of: blocking issues; confidence missing or `< min_confidence`; amount `> high_value_amount`;
-decision in `review_decisions`. Every triggered condition is listed in `reasons`; otherwise `auto_approve` with
+decision missing or in `review_decisions`. Every triggered condition is listed in `reasons`; otherwise `auto_approve` with
 reason `"all checks passed"`.
 
 ### 4.11. `app/uploader.py`
