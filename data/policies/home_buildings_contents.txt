@@ -1,0 +1,33 @@
+Lekker Cover Insurance — Home Buildings and Contents Policy Wording (synthetic, for testing only)
+This wording applies to policy numbers starting with HOM-. Amounts are in South African rand (ZAR).
+
+## 1 Definitions
+"Buildings" means the main dwelling, outbuildings, fixed fittings, roof and fixed solar installations at the
+address in the schedule. "Contents" means household goods owned by you inside the buildings.
+
+## 2 Cover — storm, wind, hail and lightning
+We cover sudden damage to the buildings and contents caused by storm, wind, hail, lightning or flood,
+including damage to the roof, gutters, windows and fixed solar panels.
+
+## 3 Cover — sudden escape of water
+We cover damage caused by water that escapes suddenly from a burst pipe, geyser, tank or fixed appliance, and
+the cost of tracing the source of the escape.
+
+## 4.1 Exclusions — wear and tear
+We do not cover wear and tear, gradual deterioration, or the cost of maintaining the buildings.
+
+## 4.2 Exclusions — gradual damage
+We do not cover damage that happens gradually over time, including water that leaks or seeps slowly, damp,
+rising damp, mould, wet rot or dry rot, whether or not the cause was visible. Section 3 covers only water that
+escapes suddenly.
+
+## 4.3 Exclusions — unoccupied buildings
+We do not cover theft or water damage while the buildings have been unoccupied for more than 60 days in a row.
+
+## 5 Excess
+The basic excess is R2 500 per claim. Storm and hail claims carry an additional excess of R1 000.
+
+## 6 Claims procedure
+You must notify us within 30 days of discovering the damage. A claim must include the policy number, the date of
+the incident or discovery, a description, and a repair quotation. We may appoint an assessor before we accept a
+claim.

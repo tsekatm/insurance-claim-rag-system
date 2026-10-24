@@ -1,0 +1,18 @@
+{
+  "fields": {
+    "claimant": "Thandi Mokoena",
+    "policy_number": "MOT-482913",
+    "incident_date": "2026-09-14",
+    "incident_type": "motor_collision",
+    "amount_claimed": 38450.0,
+    "currency": "ZAR",
+    "description": "The insured vehicle was hit from behind while stopped at a traffic light, damaging the rear bumper, boot and tail lights.",
+    "missing_info": []
+  },
+  "expected_coverage_decision": "covered",
+  "expected_route": "auto_approve",
+  "expected_clause_ids": [
+    "motor_comprehensive:2"
+  ],
+  "notes": "Happy path: complete text-layer PDF, collision under section 2, below the high-value threshold."
+}
