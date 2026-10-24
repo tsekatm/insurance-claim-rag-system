@@ -25,3 +25,7 @@ per-file-ignores = { "tests/*" = ["S101"] }
 python_version = "3.12"
 strict = true
 mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = ["pypdfium2", "pypdfium2.*"]  # ships no type hints or py.typed marker
+ignore_missing_imports = true
