@@ -19,7 +19,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "N", "S"]
-per-file-ignores = { "tests/*" = ["S101"] }
+per-file-ignores = { "tests/*" = ["S101"], "scripts/generate_samples.py" = ["E501"] }  # E501: document text
 
 [tool.mypy]
 python_version = "3.12"

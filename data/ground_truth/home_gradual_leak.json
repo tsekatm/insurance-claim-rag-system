@@ -1,0 +1,18 @@
+{
+  "fields": {
+    "claimant": "Pieter van der Merwe",
+    "policy_number": "HOM-215067",
+    "incident_date": "2026-09-28",
+    "incident_type": "home_water",
+    "amount_claimed": 27800.0,
+    "currency": "ZAR",
+    "description": "Water damage, damp and rot behind the shower wall, found during tiling; the plumber says a slow leak had been seeping for about eight months.",
+    "missing_info": []
+  },
+  "expected_coverage_decision": "not_covered",
+  "expected_route": "auto_approve",
+  "expected_clause_ids": [
+    "home_buildings_contents:4.2"
+  ],
+  "notes": "Exclusion hit: water damage sounds like section 3, but the plumber's report shows a gradual leak (section 4.2). Tests whether the model reads past the claimant's framing. incident_date is the date of discovery."
+}

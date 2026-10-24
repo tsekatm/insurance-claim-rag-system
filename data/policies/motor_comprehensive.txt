@@ -1,0 +1,36 @@
+Lekker Cover Insurance — Motor Comprehensive Policy Wording (synthetic, for testing only)
+This wording applies to policy numbers starting with MOT-. Amounts are in South African rand (ZAR).
+
+## 1 Definitions
+"You" means the policyholder named in the schedule. "Vehicle" means the vehicle described in the schedule.
+"Excess" means the first amount of each claim that you pay yourself.
+
+## 2 Cover — accidental damage
+We cover loss of or damage to the vehicle caused by a collision, overturning or other accidental, sudden and
+external event, including damage caused by another road user. We pay the reasonable cost of repair at an
+approved repairer, or the retail value of the vehicle if repair is uneconomical.
+
+## 3 Cover — theft and hijacking
+We cover theft or hijacking of the vehicle, and damage caused during an attempted theft. The theft must be
+reported to the South African Police Service within 24 hours and a case number supplied with the claim.
+
+## 4.1 Exclusions — driver
+We do not cover loss or damage while the vehicle is driven by a person without a valid driving licence, or by
+a person whose blood alcohol concentration is above the legal limit.
+
+## 4.2 Exclusions — wear and tear and mechanical failure
+We do not cover wear and tear, rust, mechanical or electrical breakdown, or tyre damage caused by braking,
+punctures or road surfaces, unless the vehicle was damaged in the same insured event.
+
+## 4.3 Exclusions — unauthorised use
+We do not cover loss or damage while the vehicle is used for hire, racing or speed tests, or by a person you
+did not authorise, except under section 3 (theft and hijacking).
+
+## 5 Excess
+The basic excess is 5% of the claim amount, with a minimum of R5 000 per claim. The excess applies to every
+claim under sections 2 and 3.
+
+## 6 Claims procedure
+You must notify us within 30 days of the incident. A claim must include the policy number, the date of the
+incident, a description of what happened, a repair quotation or proof of value, and, for an accident or theft,
+the police case number. We may decline or delay a claim until the required information is supplied.

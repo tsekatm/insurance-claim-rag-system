@@ -1,0 +1,22 @@
+{
+  "fields": {
+    "claimant": "Jayden Naidoo",
+    "policy_number": null,
+    "incident_date": null,
+    "incident_type": "motor_theft",
+    "amount_claimed": 21000.0,
+    "currency": "ZAR",
+    "description": "The claimant's car was stolen from outside a shopping centre; the claimant does not have the policy number and is unsure of the date.",
+    "missing_info": [
+      "policy_number",
+      "incident_date",
+      "police_case_number"
+    ]
+  },
+  "expected_coverage_decision": "insufficient_information",
+  "expected_route": "human_review",
+  "expected_clause_ids": [
+    "motor_comprehensive:3"
+  ],
+  "notes": "Image-only scan (no text layer). Policy number left blank, date written as 03/04 with a note (ambiguous day/month, and either reading is months before the claim), no police case number. Correct behaviour: nulls with reasons in missing_info, never invented values."
+}
