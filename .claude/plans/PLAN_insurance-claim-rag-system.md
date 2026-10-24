@@ -44,7 +44,7 @@ insurance-claim-rag-system/
 ├── .claude/{plans,state,logs,snapshots,staging}/
 ├── .github/workflows/
 │   ├── ci.yml                        # PR + push: ruff, mypy, pytest unit, terraform fmt/validate/tflint/checkov
-│   └── deploy-dev.yml                # added after step 3: plan → 🛑 environment approval → apply(dev) → post-apply tests
+│   └── deploy-dev.yml                # added after step 3: plan → apply(dev) → post-apply tests
 ├── docs/
 │   ├── HLD/claims-processing-architecture.png   # moved from projects/insurance-claims-rag/
 │   ├── LLD/                          # LLD_insurance-claim-rag-system.md (written after this plan is approved)
@@ -140,7 +140,7 @@ presented to you and applied only after approval. Model access in the Bedrock co
 | 1 | Restructure scaffold to section 3; move diagram to `docs/HLD/`; CLAUDE.md, README skeleton, pyproject, CI lint/test job | commit |
 | 2 | Write `docs/LLD/LLD_insurance-claim-rag-system.md` (full signatures, schemas, YAML formats) | 🛑 you approve the LLD |
 | 3 | Terraform `claims-rag-storage` → `claims-rag-iam` (incl. CI OIDC role); local plan → approval → apply; post-apply tests | 🛑 you approve each `terraform plan` |
-| 3a | `deploy-dev.yml` (best practice: OIDC, no long-lived keys; `vars.*`/`secrets.*` only; `dev` GitHub environment with required reviewer; plan artefact applied as reviewed; concurrency lock; pinned action SHAs; least-privilege `permissions:`) | 🛑 you confirm the first green run |
+| 3a | `deploy-dev.yml` (best practice: OIDC, no long-lived keys; `vars.*`/`secrets.*` only; `dev` GitHub environment (main only; required reviewer removed 2026-10-24, owner decision); plan artefact applied as reviewed; concurrency lock; pinned action SHAs; least-privilege `permissions:`) | 🛑 you confirm the first green run |
 | 4 | `model_invoker` → `prompt_manager` → `output_validator` → `rules_engine` → `safety` → `chunker` → `retriever` → `document_reader` → `router` (unit tests with fakes, no AWS) | unit suite green |
 | 5 | Synthetic data: 2–3 policies, 3 claims, ground-truth JSON | 🛑 you review the documents |
 | 6 | `uploader` → `steps` → `claims_processor`; integration test against dev | integration green |
