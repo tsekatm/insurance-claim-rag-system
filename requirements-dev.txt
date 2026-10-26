@@ -6,3 +6,5 @@ mypy==2.4.0
 types-PyYAML==6.0.12.20260906
 boto3-stubs[bedrock-runtime,s3]==1.43.118
 checkov==3.2.459
+reportlab==5.0.1      # scripts/generate_samples.py only
+python-docx==1.2.0    # scripts/generate_samples.py only

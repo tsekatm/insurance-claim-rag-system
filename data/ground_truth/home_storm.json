@@ -1,0 +1,18 @@
+{
+  "fields": {
+    "claimant": "Nomvula Dlamini",
+    "policy_number": "HOM-730442",
+    "incident_date": "2026-10-05",
+    "incident_type": "home_storm",
+    "amount_claimed": 64200.0,
+    "currency": "ZAR",
+    "description": "A hailstorm broke roof tiles and two solar panels and let rain into the main bedroom, damaging the ceiling and a bed.",
+    "missing_info": []
+  },
+  "expected_coverage_decision": "covered",
+  "expected_route": "human_review",
+  "expected_clause_ids": [
+    "home_buildings_contents:2"
+  ],
+  "notes": "Plain-text email with PII (email, phone, ID number) for redaction. Covered under section 2, but above the R50 000 high-value threshold, so routed to human review."
+}

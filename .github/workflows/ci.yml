@@ -24,7 +24,7 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: pip install -r requirements-dev.txt
-      - run: ruff format --check src tests && ruff check src tests
+      - run: ruff format --check src tests scripts && ruff check src tests scripts
       - run: mypy src
       - run: pytest -m "not integration and not deployment" --junitxml=tests/reports/junit-unit.xml
 
